@@ -3,10 +3,22 @@ import img from './images/img.jpeg'
 import './Sell.css'
 import { Button, Form ,Col,Row,InputGroup} from 'react-bootstrap'
 import { Modal } from 'react-bootstrap';
+import { uploadDetails } from '../services/allAPI';
 
 
 function Sell() {
   const [show, setShow] = useState(false);
+
+  const [property,setProperty] = useState({
+      pname:"",
+      mail:"",
+      num:"",
+      price:"",
+      city:"",
+      state:"",
+      houseno:"",
+      image:""
+  })
 
   const handleClose = () => setShow(false);
 
@@ -15,12 +27,19 @@ function Sell() {
   }
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
+
     }
+
+    // api call
+    const response = await uploadDetails(property)
+    console.log(property);
+
 
     setValidated(true);
   };
@@ -46,7 +65,7 @@ function Sell() {
           <Modal.Title style={{marginLeft:'20%',fontWeight:'bold',fontSize:'40px'}}>TO SELL YOUR PROPERTY</Modal.Title>
         </Modal.Header>
         <Modal.Body >
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={(e)=>handleSubmit(e)}>
       <Row className="mb-3">
         <Form.Group as={Col} md="6" controlId="validationCustom01">
           <Form.Label  style={{fontWeight:'bold'}}>NAME</Form.Label>
@@ -54,7 +73,8 @@ function Sell() {
            style={{borderRadius:'0',padding:'15px'}}
             required
             type="text"
-         
+            name='pname'
+            onChange={(e)=>setProperty({...property,pname:e.target.value})}
           />
           <Form.Control.Feedback style={{fontWeight:'bold'}}>Looks good!</Form.Control.Feedback>
         </Form.Group>
@@ -64,7 +84,8 @@ function Sell() {
             required
             type="email"
             style={{borderRadius:'0',padding:'15px'}}
-
+            name='mail'
+            onChange={(e)=>setProperty({...property,mail:e.target.value})}
             
           />
           <Form.Control.Feedback style={{fontWeight:'bold'}}>Looks good!</Form.Control.Feedback>
@@ -72,7 +93,8 @@ function Sell() {
         
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>PHONE NO</Form.Label>
-          <Form.Control type="number"           
+          <Form.Control type="number"  name='num'  
+           onChange={(e)=>setProperty({...property,num:e.target.value})}       
            style={{borderRadius:'0',padding:'15px'}}
           required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -81,7 +103,8 @@ function Sell() {
         </Form.Group>
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>PRICE</Form.Label>
-          <Form.Control type="number"           
+          <Form.Control type="number"  name='price'   
+           onChange={(e)=>setProperty({...property,price:e.target.value})}      
            style={{borderRadius:'0',padding:'15px'}}
           required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -92,7 +115,8 @@ function Sell() {
       <Row className="mb-3">
         <Form.Group as={Col} md="6" controlId="validationCustom03">
           <Form.Label style={{fontWeight:'bold'}}>CITY</Form.Label>
-          <Form.Control type="text"           
+          <Form.Control type="text" name='city' 
+           onChange={(e)=>setProperty({...property,city:e.target.value})}         
            style={{borderRadius:'0',padding:'15px'}}
              required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -101,7 +125,8 @@ function Sell() {
         </Form.Group>
         <Form.Group as={Col} md="6" className='mb-3' controlId="validationCustom04">
           <Form.Label style={{fontWeight:'bold'}}>STATE</Form.Label>
-          <Form.Control type="text"         
+          <Form.Control type="text"  name='state'
+           onChange={(e)=>setProperty({...property,state:e.target.value})}       
              style={{borderRadius:'0',padding:'15px'}}
 
              required />
@@ -111,7 +136,8 @@ function Sell() {
         </Form.Group>
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>HOUSE NUMBER</Form.Label>
-          <Form.Control type="text"            
+          <Form.Control type="text" name='houseno'  
+           onChange={(e)=>setProperty({...property,houseno:e.target.value})}         
           style={{borderRadius:'0',padding:'15px'}}
 
           required />
@@ -121,7 +147,8 @@ function Sell() {
         </Form.Group>
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>IMAGE LINK</Form.Label>
-          <Form.Control type="text"           
+          <Form.Control type="text"    name='image'
+           onChange={(e)=>setProperty({...property,image:e.target.value})}       
            style={{borderRadius:'0',padding:'15px'}}
          required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -138,7 +165,7 @@ function Sell() {
           feedbackType="invalid"
         />
       </Form.Group>
-      <Button style={{fontWeight:'bold'}} type="submit">SELL YOUR PROPERTY</Button>
+      <Button style={{fontWeight:'bold'}} type="submit"  onClick={handleClose}>SELL YOUR PROPERTY</Button>
     </Form>
         </Modal.Body>
         {/* <Modal.Footer>

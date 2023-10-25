@@ -15,7 +15,19 @@
 .contentImage {
     position: absolute;
     top: 40%;
-    left: 30%;
+    left: 30% ;
     text-align: center;
     z-index: 1;
   }
+
+
+  
+@media (max-width: 768px){
+    .contentImage {
+        position: absolute;
+        top: 40%;
+        left: 8% ;
+        text-align: center;
+        z-index: 1;
+      }
+}

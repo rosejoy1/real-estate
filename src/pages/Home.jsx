@@ -18,12 +18,12 @@ function Home() {
         <div className="content d-flex flex-column justify-content-center align-items-center">
           <h5 style={{fontFamily:'yellowtail,cursive',fontWeight:'bold'}}>intentionally different</h5>
           <h1 style={{fontSize:'65px',fontWeight:'bold'}} className='heading'>PROPERTY EXPERTS</h1>
-          <div className="content w-100 d-flex  justify-content-center align-items-center">
+          {/* <div className="content w-100 d-flex  justify-content-center align-items-center">
             <input style={{width:'100%'}}  className='inputLabel p-3 bg-dark ' type="text " placeholder='Enter Location or Post Code'/>
             
             <Button   className='button1 w-75 p-3 bg-primary' variant="primary" style={{fontWeight:'bold',borderRadius:'0px'}}>SEARCH PROPERTY</Button>{' '}
            
-          </div>
+          </div> */}
         </div>
       </div>
     </>

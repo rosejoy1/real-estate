@@ -1,0 +1,21 @@
+.gridCard{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 30px;
+}
+.CardContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media (max-width: 1200px) {
+    .gridCard {
+        grid-template-columns: 1fr 1fr; /* 2 columns for screens <= 1200px */
+    }
+}
+
+@media (max-width: 768px) {
+    .gridCard {
+        grid-template-columns: 1fr; /* 1 column for screens <= 768px */
+    }
+}
