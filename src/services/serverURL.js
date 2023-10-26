@@ -1,1 +1,1 @@
-export const serverURL="https://rea-estate-server.onrender.com/";
+export const serverURL="https://rea-estate-server.onrender.com";
