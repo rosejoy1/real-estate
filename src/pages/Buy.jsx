@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Card ,Button, Row, Col,Form,Modal} from 'react-bootstrap'
-import { deleteProperty, getDetails, uploadDetails } from '../services/allAPI'
+import { deleteProperty, editProperty, getDetails, uploadDetails } from '../services/allAPI'
 import './Buy.css'
 import { Link } from 'react-router-dom'
 
 function Buy() {
-  const [allPropety,setAllProperty]=useState([])
+  const [allPropety,setAllProperty]=useState()
   const [deleteStatus,setDeleteStatus]=useState(false)
+
+
   const getAllProperty= async () =>{
       const {data} = await getDetails()
       setAllProperty(data)
@@ -24,16 +26,49 @@ function Buy() {
 
   const [show, setShow] = useState(false);
 
-  const [property,setProperty] = useState({
-      pname:"",
-      mail:"",
-      num:"",
-      price:"",
-      city:"",
-      state:"",
-      houseno:"",
-      image:""
-  })
+  
+  const [name,setName]=useState()
+  const [email,setEmail]=useState()
+  const [numb,setNumb]=useState()
+  const [cost,setCost]=useState()
+  const [cityName,setCityName]=useState()
+  const [stateName,setStateName]=useState()
+  const [house,setHouse]=useState()
+  const [images,setImages]=useState()
+
+  
+
+  const [data, setData] = useState(null); // Initialize data as null or an empty object based on your use case
+ 
+const updateDetails = async (id) => {
+  handleShow()
+    const editData = allPropety.filter((item) => item.id === id);
+    setData(editData[0]);
+    console.log(data); // This will log the correct data once the state has been updated
+   
+}
+
+
+
+useEffect(() => {
+    if (data) {
+        const { pname, mail, city, state, image, num, price, houseno } = data;
+        console.log(pname, mail, city, state, image, num, price, houseno);
+        setName(pname);
+        setEmail(mail);
+        setNumb(num);
+        setCost(price);
+        setCityName(city);
+        setStateName(state);
+        setHouse(houseno);
+        setImages(image);
+    }
+}, [data]); 
+
+
+  
+
+ 
 
   const handleClose = () => setShow(false);
 
@@ -51,13 +86,32 @@ function Buy() {
 
     }
 
-    // api call
-    const response = await uploadDetails(property)
-    console.log(property);
+    // // api call
+    // const response = await uploadDetails(property)
+    // console.log(property);
 
 
     setValidated(true);
   };
+
+  const dataToUpdate ={ 
+     pname:name,
+  mail:email,
+  num:numb,
+  price:cost,
+  city:cityName,
+  state:stateName,
+  houseno:house,
+  image:images
+}
+// console.log(dataToUpdate);
+const handleUpdate = async(id)=>{
+  const response= await editProperty(id,dataToUpdate)
+   handleClose()
+  console.log(response);
+}
+ 
+ 
   return (
     <>
      <div className='gridCard'>
@@ -77,7 +131,7 @@ function Buy() {
           <i style={{color:'red'}} class="fa-solid fa-trash"></i>
         </Button>
         <Link to={`/buy`}>
-          <Button onClick={handleShow} style={{fontWeight:'bold'}} className='btn btn-light'>
+          <Button onClick={()=>updateDetails(item.id)} style={{fontWeight:'bold'}} className='btn btn-light'>
            EDIT
           </Button>
         </Link>
@@ -104,7 +158,9 @@ function Buy() {
             required
             type="text"
             name='pname'
-            onChange={(e)=>setProperty({...property,pname:e.target.value})}
+            value={name ||" "}
+            onChange={(e)=>setName(e.target.value)}
+            // onChange={(e)=>setProperty({...property,pname:e.target.value})}
           />
           <Form.Control.Feedback style={{fontWeight:'bold'}}>Looks good!</Form.Control.Feedback>
         </Form.Group>
@@ -115,7 +171,10 @@ function Buy() {
             type="email"
             style={{borderRadius:'0',padding:'15px'}}
             name='mail'
-            onChange={(e)=>setProperty({...property,mail:e.target.value})}
+            value={email || ""}
+            onChange={(e)=>setEmail(e.target.value)}
+
+            // onChange={(e)=>setProperty({...property,mail:e.target.value})}
             
           />
           <Form.Control.Feedback style={{fontWeight:'bold'}}>Looks good!</Form.Control.Feedback>
@@ -123,8 +182,10 @@ function Buy() {
         
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>PHONE NO</Form.Label>
-          <Form.Control type="number"  name='num'  
-           onChange={(e)=>setProperty({...property,num:e.target.value})}       
+          <Form.Control type="number"  name='num' value={numb || ""}  
+                      onChange={(e)=>setNumb(e.target.value)}
+
+          //  onChange={(e)=>setProperty({...property,num:e.target.value})}       
            style={{borderRadius:'0',padding:'15px'}}
           required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -133,8 +194,10 @@ function Buy() {
         </Form.Group>
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>PRICE</Form.Label>
-          <Form.Control type="number"  name='price'   
-           onChange={(e)=>setProperty({...property,price:e.target.value})}      
+          <Form.Control type="number"  name='price'  value={cost || ""} 
+                      onChange={(e)=>setCost(e.target.value)}
+
+          //  onChange={(e)=>setProperty({...property,price:e.target.value})}      
            style={{borderRadius:'0',padding:'15px'}}
           required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -145,8 +208,10 @@ function Buy() {
       <Row className="mb-3">
         <Form.Group as={Col} md="6" controlId="validationCustom03">
           <Form.Label style={{fontWeight:'bold'}}>CITY</Form.Label>
-          <Form.Control type="text" name='city' 
-           onChange={(e)=>setProperty({...property,city:e.target.value})}         
+          <Form.Control type="text" name='city' value={cityName || ""}
+                      onChange={(e)=>setCityName(e.target.value)}
+
+          //  onChange={(e)=>setProperty({...property,city:e.target.value})}         
            style={{borderRadius:'0',padding:'15px'}}
              required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -155,8 +220,10 @@ function Buy() {
         </Form.Group>
         <Form.Group as={Col} md="6" className='mb-3' controlId="validationCustom04">
           <Form.Label style={{fontWeight:'bold'}}>STATE</Form.Label>
-          <Form.Control type="text"  name='state'
-           onChange={(e)=>setProperty({...property,state:e.target.value})}       
+          <Form.Control type="text"  name='state' value={stateName || ""}
+                      onChange={(e)=>setStateName(e.target.value)}
+
+          //  onChange={(e)=>setProperty({...property,state:e.target.value})}       
              style={{borderRadius:'0',padding:'15px'}}
 
              required />
@@ -166,8 +233,10 @@ function Buy() {
         </Form.Group>
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>HOUSE NUMBER</Form.Label>
-          <Form.Control type="text" name='houseno'  
-           onChange={(e)=>setProperty({...property,houseno:e.target.value})}         
+          <Form.Control type="text" name='houseno' value={house || ""} 
+                      onChange={(e)=>setHouse(e.target.value)}
+
+          //  onChange={(e)=>setProperty({...property,houseno:e.target.value})}         
           style={{borderRadius:'0',padding:'15px'}}
 
           required />
@@ -177,8 +246,10 @@ function Buy() {
         </Form.Group>
         <Form.Group as={Col} md="6" controlId="validationCustom05">
           <Form.Label style={{fontWeight:'bold'}}>IMAGE LINK</Form.Label>
-          <Form.Control type="text"    name='image'
-           onChange={(e)=>setProperty({...property,image:e.target.value})}       
+          <Form.Control type="text" value={images || ""}   name='image'
+                      onChange={(e)=>setImages(e.target.value)}
+
+          //  onChange={(e)=>setProperty({...property,image:e.target.value})}       
            style={{borderRadius:'0',padding:'15px'}}
          required />
           <Form.Control.Feedback type="invalid" style={{fontWeight:'bold'}}>
@@ -195,7 +266,7 @@ function Buy() {
           feedbackType="invalid"
         />
       </Form.Group>
-      <Button style={{fontWeight:'bold'}} type="submit"  onClick={handleClose}>SELL YOUR PROPERTY</Button>
+      <Button style={{fontWeight:'bold'}} type="submit"  onClick={()=>handleUpdate(item.id)}>UPDATE DETAIL</Button>
     </Form>
         </Modal.Body>
         {/* <Modal.Footer>

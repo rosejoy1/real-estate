@@ -11,6 +11,7 @@ export const uploadDetails = async (body)=>{
 export const getDetails = async ()=>{
     return await commonAPI("GET",`${serverURL}/property`,"")
 }
+// getAddDetails
 
 // delete a Singleproperty
 export const deleteProperty = async(id)=>{
@@ -18,5 +19,5 @@ export const deleteProperty = async(id)=>{
 }
 // edit property
 export const editProperty=async (id,body)=>{
-    return await commonAPI("PUT",`${serverURL}/property/${id}`,body)
+    return await commonAPI("PATCH",`${serverURL}/property/${id}`,body)
 }

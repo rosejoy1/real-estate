@@ -20,6 +20,9 @@ function Sell() {
       image:""
   })
 
+  
+  
+
   const handleClose = () => setShow(false);
 
   const handleShow = () =>{
